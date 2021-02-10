@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  server:
+    container_name: papa_elon_pump
+    restart: always
+    build: .
+    environment:
+      - PORT=4001
+    ports:
+      - "4001:4001"
