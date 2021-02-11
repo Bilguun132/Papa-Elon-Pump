@@ -1,5 +1,6 @@
 import { Tweet } from "../model";
 import { TweetModel } from "../db/Models/Tweet";
+import { Page } from "puppeteer/lib/cjs/puppeteer/common/Page";
 export function getTweets($: any) {
   let tweets: Tweet[] = [];
   $('div[data-testid="tweet"]').each((i: number, elem: any) => {
@@ -48,21 +49,22 @@ export const extractIdFromHref = (link: string) => {
 };
 
 export const getTweetSS = async (
-  page: any,
+  page: Page,
   tweets: Tweet[],
   username: string,
   onComplete: (tweet: Tweet) => void
-) => {
+): Promise<void> => {
   if (tweets.length > 0) {
     let latestTweet = tweets[0];
     const dbLatestTweet = await TweetModel.findOne({
       tweetId: latestTweet.tweetId,
     });
     if (!dbLatestTweet) {
-      const el = await page.$(
-        "#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > div:nth-child(2) > div > div > div:nth-child(3) > section > div > div > div:nth-child(1) > div > div > article > div > div > div > div.css-1dbjc4n.r-18u37iz"
-      );
-      await el?.screenshot({ path: `${username}.png` });
+      // const el = await page.$(
+      //   "#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > div:nth-child(2) > div > div > div:nth-child(3) > section > div > div > div:nth-child(1) > div > div > article > div > div > div > div.css-1dbjc4n.r-18u37iz"
+      // );
+      // await el?.screenshot({ path: `${username}.png` });
+      await page.screenshot({ path: `${username}.png` });
       onComplete(latestTweet);
       console.log("LatestTweet", latestTweet.tweetId);
       const tweet = new TweetModel(latestTweet);
