@@ -1,5 +1,8 @@
 export type Tweet = {
-  tweet: string;
-  timestamp: number;
-  author: string;
+  id: number,
+  msg: string,
+  type: string,
+  link: string,
+  timestamp: string,
+  relativeTime: string
 };
