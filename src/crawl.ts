@@ -3,13 +3,12 @@ import puppeteer from "puppeteer";
 import { Tweet } from "./model";
 import { Browser, Page } from "puppeteer/lib/cjs/puppeteer/api-docs-entry";
 
-import { getTweets, getTweetSS } from './utils/tweets';
+import { getTweets, getTweetSS } from "./utils/tweets";
 
 export class Scraper {
   private static instance: Scraper;
-  private tweetTimeStampMap: { [key: number]: string } = {};
   private browser: Browser | null = null; // for test disable the headless mode,
-  private constructor() { }
+  private constructor() {}
 
   public static getInstance = (): Scraper => {
     if (!Scraper.instance) {
@@ -46,14 +45,14 @@ export class Scraper {
     const $ = cheerio.load(content);
 
     const tweets = getTweets($);
-    getTweetSS(page, tweets, this.tweetTimeStampMap, username, onComplete);
+    getTweetSS(page, tweets, username, onComplete);
 
     console.log("start evaluate javascript");
 
     setInterval(() => {
       const tweets = getTweets($);
-      getTweetSS(page, tweets, this.tweetTimeStampMap, username, onComplete);
-      console.log('Running next...');
+      getTweetSS(page, tweets, username, onComplete);
+      console.log("Running next...");
     }, 14000);
   };
 }
