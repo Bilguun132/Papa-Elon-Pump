@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  server:
+    container_name: papa_elon_pump
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=$MONGO_HOSTNAME
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    ports:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      - PORT=4001
+    ports:
+      - "4001:4001"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - app-network
+    command: yarn dev
+  mongodb:
+    image: mongo:4.1.8-xenial
+    container_name: mongodb
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+    volumes:
+      - data:/data/db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  data:
